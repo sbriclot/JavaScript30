@@ -58,7 +58,37 @@
   <audio data-key="76" src="sounds/tink.wav"></audio>
 
 <script>
+  const removeTransition = (e) => {
+    /* because Transition End launches 6 distinct functions,
+       add a guard clause to remove the class only 1 time
+    */
+    if (e.propertyName !== "transform") { return };
+    e.target.classList.remove("playing");
+  };
 
+  const keyPressed = (e) => {
+    // select the right key element, if listed
+    const key = document.querySelector(`.key[data-key="${e.keyCode}`);
+    // if the key is not listed, leave the function
+    if (!key) { return };
+
+    /* if the key is listed :
+      - select the associated sound
+      - highlight the key's DIV
+      - play the sound
+    */
+    const audio = document.querySelector(`audio[data-key="${e.keyCode}`);
+    key.classList.add("playing");
+    audio.currentTime = 0;
+    audio.play();
+  };
+
+  const keys = document.querySelectorAll(".key");
+  keys.forEach(key => {
+    key.addEventListener('transitionend', removeTransition);
+  });
+
+  window.addEventListener('keydown', keyPressed);
 </script>
 
 
