@@ -62,13 +62,52 @@
       background: black;
       position: absolute;
       top: 50%;
+      transform-origin: 100%;
+    }
+
+    /* make the hours hand shorter */
+    .hour-hand {
+      width: 40%;
+      left: 10%;
+    }
+
+    /* make the seconds hand red */
+    .second-hand {
+      background: red;
     }
 
   </style>
 
   <script>
+    // select hands elements
+    const hh = document.querySelector('.hour-hand');
+    const mh = document.querySelector('.min-hand');
+    const sh = document.querySelector('.second-hand');
 
+    // calculate the rotation degree for each hand
+    setDegs = (handVal) => {
+      return ((handVal / 60) * 360) + 90;
+    };
 
+    // refresh the display each second
+    setTime = () => {
+      const now = new Date();
+      let hours = now.getHours();
+      // in case of 24Hr timezone, convert PM hours in 12Hr format
+      if (hours > 12) {
+        hours -= 12;
+      }
+      const minutes = now.getMinutes();
+      const seconds = now .getSeconds();
+
+      // multiply hours by 5 to have a number base 60
+      hh.style.transform = `rotate(${setDegs(hours * 5)}deg)`;
+      mh.style.transform = `rotate(${setDegs(minutes)}deg)`;
+      sh.style.transform = `rotate(${setDegs(seconds)}deg)`;
+    };
+
+    // 1 second timer interval
+    setInterval(setTime, 1000);
   </script>
 </body>
 </html>
