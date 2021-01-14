@@ -7,6 +7,63 @@
 <body>
 <canvas id="draw" width="800" height="800"></canvas>
 <script>
+  const canvas = document.querySelector('#draw');
+  const ctx = canvas.getContext('2d');
+  canvas.height = window.innerHeight;
+  canvas.width = window.innerWidth;
+  ctx.strokeStyle = '#BADA55';
+  ctx.lineJoin = 'round';
+  ctx.lineCap = 'round';
+  ctx.lineWidth = 100;
+
+  let isDrawing = false;
+  let lastX = 0;
+  let lastY = 0;
+  let hue = 0;
+  let increase = true;
+
+  function draw(e) {
+    // leave function is mouse in not down or in the canvas
+    if (!isDrawing) return;
+
+    // apply the new line color (hue)
+    ctx.strokeStyle = `hsl(${hue}, 100%, 50%)`;
+
+    // draw the line  
+    ctx.beginPath();
+    ctx.moveTo(lastX, lastY);
+    ctx.lineTo(e.offsetX, e.offsetY);
+    ctx.stroke();
+
+    // update the coordinates
+    [lastX, lastY] = [e.offsetX, e.offsetY];
+
+    // line width managment
+    if ( ctx.lineWidth >= 100 || ctx.lineWidth <= 10) {
+      increase = !increase;  // each time a limit is reached, the increase flag is switched
+    }
+    if (increase) {
+      ctx.lineWidth++;
+    } else {
+      ctx.lineWidth--;
+    }
+
+    //hue management
+    hue++;
+    if (hue >= 360) {
+      hue = 0;
+    }
+  };
+
+  canvas.addEventListener('mousemove', draw);
+  canvas.addEventListener('mousedown', (e)=> {
+    isDrawing = true;
+    // update the coordinates to the new starting point
+    [lastX, lastY] = [e.offsetX, e.offsetY];
+  });
+  canvas.addEventListener('mouseup', (e)=> { isDrawing = false; });
+  canvas.addEventListener('mouseout', (e)=> { isDrawing = false; });
+
 </script>
 
 <style>
