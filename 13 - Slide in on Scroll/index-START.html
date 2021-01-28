@@ -56,8 +56,28 @@
         timeout = setTimeout(later, wait);
         if (callNow) func.apply(context, args);
       };
-    }
+    };
 
+    const sliders = document.querySelectorAll('.slide-in');
+
+    function checkSlide() {
+      // screen position
+      const screenTop = window.scrollY;
+      const screenBottom = screenTop + window.innerHeight;
+
+      sliders.forEach(slider => {
+        // image middle position
+        const slideIn = slider.offsetTop + slider.height / 2;
+        if (slideIn > screenTop && slideIn < screenBottom && !slider.classList.contains("active")) {
+          slider.classList.add("active");
+        };
+        if ((slideIn < screenTop || slideIn > screenBottom) && slider.classList.contains("active")) {
+          slider.classList.remove("active");
+        }
+      });
+    };
+
+    document.addEventListener('scroll', debounce(checkSlide, 10)); // better visual effect with 10ms
   </script>
 
   <style>
