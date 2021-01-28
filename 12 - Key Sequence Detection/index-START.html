@@ -7,6 +7,14 @@
 </head>
 <body>
 <script>
+  const sequence = [];
+  const secretCode = "joy"
+  document.addEventListener("keyup", (e) => {
+    sequence.push(e.key);
+    if (sequence.length > secretCode.length) sequence.shift();
+    
+    if (sequence.join("") === secretCode) cornify_add();
+  });
 </script>
 </body>
 </html>
