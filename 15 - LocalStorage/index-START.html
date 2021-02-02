@@ -23,12 +23,66 @@
       <input type="text" name="item" placeholder="Item Name" required>
       <input type="submit" value="+ Add Item">
     </form>
+    <br>
+    <button class="clear">Clear list</button>
   </div>
 
 <script>
   const addItems = document.querySelector('.add-items');
   const itemsList = document.querySelector('.plates');
-  const items = [];
+  const items = JSON.parse(localStorage.getItem('items')) || [];
+
+  function addItem(e) {
+    e.preventDefault();
+
+    const item = {
+      text: this.querySelector('[name=item]').value,
+      done: false
+    };
+
+    items.push(item);
+    this.reset();
+    localStorage.setItem('items', JSON.stringify(items));
+    populateList(items, itemsList);
+  };
+
+  function populateList(plates = [], platesList) {
+    platesList.innerHTML = plates.map((plate, i) => {
+      return `
+        <li>
+          <input type="checkbox" data-index="${i}" id="item${i}" ${plate.done ? "checked" : "" } />
+          <label for="item${i}">${plate.text}</label>
+        </li>
+      `
+    }).join('');
+  };
+
+  function toggleDone(e) {
+    if (!e.target.matches('input')) return; // avoid duplicated execution input/label
+    
+    const item = e.target;
+    items[item.dataset.index].done = !items[item.dataset.index].done;
+    localStorage.setItem('items', JSON.stringify(items));
+    populateList(items, itemsList);
+  };
+
+  function clearList() {
+    localStorage.removeItem('items');
+    items.length = 0;  // reset array
+    populateList(items, itemsList);
+  };
+
+  addItems.addEventListener('submit', addItem);
+
+  // manage the checkboxes changes
+  itemsList.addEventListener('click', toggleDone);
+
+  // add a clear button
+  const clearBtn = document.querySelector('.clear');
+  clearBtn.addEventListener('click', clearList);
+  
+  // init list on reload
+  populateList(items, itemsList);
 
 </script>
 
