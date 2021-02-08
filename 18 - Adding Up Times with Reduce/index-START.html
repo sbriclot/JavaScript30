@@ -182,6 +182,25 @@
     </li>
   </ul>
 <script>
+  // [... ] generates an array instead of a NodeObject
+  const videos = [...document.querySelectorAll('[data-time]')];
+
+  const times = videos
+    .map(video => video.dataset.time)  // create an array with the times
+    .map(time => {
+      // split times in minutes/seconds and return times in seconds
+      const [mins, secs] = time.split(":").map(parseFloat);
+      return mins * 60 + secs;
+    })
+
+  let total = 0;
+  const seconds = times.reduce((total, value) => { return total + value });
+
+  // ~~ is a shorter for Math.floor()
+  const hrs = ~~(seconds / 3600);
+  const mins = ~~((seconds % 3600) / 60);
+  const secs = ~~(seconds % 60);
+  console.log(hrs, mins, secs);
 </script>
 </body>
 </html>
