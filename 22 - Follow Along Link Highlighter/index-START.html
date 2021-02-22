@@ -27,6 +27,29 @@
 
   <script>
     // 👀👀👀👀👀👀👀👀👀👀👀👀👀👀👀
+    const links = document.querySelectorAll('a');
+    const highlight = document.createElement('span');
+    highlight.classList.add('highlight');
+    document.body.append(highlight);
+
+    function highlightLink() {
+      const linkPos = this.getBoundingClientRect();
+      // make the hightlight a little bit longer for a better visual render
+      const coords = {
+        width: linkPos.width + 6,
+        height: linkPos.height,
+        fromTop: linkPos.top + window.scrollY,
+        fromLeft: linkPos.left + window.scrollX - 3
+      };
+
+      highlight.style.width = `${coords.width}px`;
+      highlight.style.height = `${coords.height}px`;
+      highlight.style.transform = `translate(${coords.fromLeft}px, ${coords.fromTop}px)`;
+    }
+
+    links.forEach(link => {
+      link.addEventListener('mouseenter', highlightLink);
+    });
   </script>
 </body>
 </html>
