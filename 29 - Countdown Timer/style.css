@@ -80,3 +80,16 @@ body {
   font-size: 4rem;
   color: white;
 }
+
+.rest3 {
+  background: yellow;
+}
+.rest2 {
+  background: orange;
+}
+.rest1 {
+  background: orangered;
+}
+.rest0 {
+  background: red;
+}
